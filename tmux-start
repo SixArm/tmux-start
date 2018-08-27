@@ -1,0 +1,108 @@
+#!/bin/sh
+
+##
+# Start tmux with a sesson and windows.
+#
+# Syntax:
+#
+#     tmux-start <session-name> [window-name] ...
+#
+# Example:
+#
+#     tmux-start demo alpha bravo charlie delta
+#
+# The example does this:
+#
+#   * Create a session name "demo",
+#     or if the session name already exists,
+#     then attach to the existing session.
+#
+#   * Create a window name "alpha" and send the
+#     keys "bravo" and a return character.
+#
+#   * Create a window name "charlie" and send the
+#     keys "delta" and a return character.
+#
+#
+# ## What this does
+#
+# The script creates the session "session-name".
+#
+# If the session name already exists, then the
+# script attaches to it i.e. to the existing session.
+#
+# The script creates windows, starting at window 1.
+# Set each window's name as per the command line args,
+# and send the keys as per the command line args.
+#
+# The script selects window 1, and window 2 as the previous.
+# This is because we typically want the first window active,
+# and we want the second window to be available by one key.
+#
+#
+# ## Tracking
+#
+# Program: tmux-start
+# Version: 4.0.0
+# Created: 2013-08-02
+# Updated: 2018-08-28
+# License: GPL
+# Contact: Joel Parker Henderson (joel@joelparkerhenderson.com)
+##
+
+# Safeguards
+set -euf
+
+# Helper functions
+out() { printf %s\\n "$*" ; }; export -f out
+err() { >&2 printf %s\\n "$*" ; }; export -f err
+die() { err $(log) "$*" ; exit 255 ; }; export -f die
+log() { printf '%s %s %s\n' "$( now )" $$ "$*" ; }; export -f log
+now() { date -u "+%Y-%m-%dT%H:%M:%S.%NZ" ; }; export -f now
+sec() { date "+%s" ; }; export -f sec
+zid() { hexdump -n 16 -v -e '16/1 "%02x" "\n"' /dev/random ; }; export -f zid
+cmd() { command -v $1 >/dev/null 2>&1 ; }; export -f cmd
+
+
+# Preflight
+cmd tmux || die "The command \"tmux\" needs to be available"
+
+# We expect the TMUX environment variable to be unset.
+if [ ! -z ${TMUX+_} ]; then
+    out "TMUX environment variable is already set, so exit"
+    exit 1
+fi
+
+session_name="$1"; shift
+
+# Set the name the terminal window to the session name.
+# This line is optional -- you may comment it out if you prefer.
+# You may prefer to set your own title, or may already be using
+# something such as zsh auto title, or OSX iTerm2 appearance settings
+# to automatically set window & tab titles, or some other approach.
+echo -e "\033]1;$session_name\007"
+
+# Create the new session or attach to the existing session.
+tmux new-session -A -D -d -s "$session_name"
+
+# Start the new window numbering at 1, instead of at 0.
+# We do this because it's easier to type on a typical keyboard.
+# You can optionally set the window numbering number in your
+# tmux configuration file; we do it explicity here because we
+# tend to use this script on systems that lack tmux configs.
+window_number=1
+
+# Loop on the args: a window name and a window keys string.
+while [ "$#" -gt 0 ]
+do
+  window_name="$1"; shift
+  window_keys="$1"; shift
+  tmux new-window -d -t "$session_name:$window_number" -n "$window_name"
+  tmux send-keys -t "$session_name:$window_number" "$window_keys" C-m
+  window_number=$((window_number+1))
+done
+
+tmux kill-window -t "$session_name:0"
+tmux select-window -t "$session_name:2"
+tmux select-window -t "$session_name:1"
+tmux -2 attach-session -d
