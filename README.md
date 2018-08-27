@@ -52,9 +52,9 @@ The program is implemented via a Ruby gem.
 
 ## Tracking
 
-Program: tmux-start
-Version: 4.0.0
-Created: 2013-08-02
-Updated: 2018-08-28
-License: GPL
-Contact: Joel Parker Henderson (joel@joelparkerhenderson.com)
+* Program: tmux-start
+* Version: 4.0.1
+* Created: 2013-08-02
+* Updated: 2018-08-28
+* License: GPL
+* Contact: Joel Parker Henderson (joel@joelparkerhenderson.com)
