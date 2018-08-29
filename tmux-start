@@ -63,17 +63,31 @@ sec() { date "+%s" ; }; export -f sec
 zid() { hexdump -n 16 -v -e '16/1 "%02x" "\n"' /dev/random ; }; export -f zid
 cmd() { command -v $1 >/dev/null 2>&1 ; }; export -f cmd
 
+# Args
+session_name="$1"; shift
 
 # Preflight
 cmd tmux || die "The command \"tmux\" needs to be available"
 
 # We expect the TMUX environment variable to be unset.
 if [ ! -z ${TMUX+_} ]; then
-    out "TMUX environment variable is already set, so exit"
+    set +e
+    err "The TMUX environment variable is set:"
+    err ""
+    err "    $TMUX"
+    err ""
+    err "This means you're already inside a tmux session."
+    err ""
+    err "To list sessions:"
+    err ""
+    err "    tmux list-sessions"
+    err ""
+    err "To kill a session such as the one for this script:"
+    err ""
+    err "    tmux kill-session -t $session_name"
     exit 1
+    set -e
 fi
-
-session_name="$1"; shift
 
 # Set the name the terminal window to the session name.
 # This line is optional -- you may comment it out if you prefer.
