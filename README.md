@@ -10,7 +10,6 @@ Example:
 
     tmux-start mysession mywindow1 hello mywindow2 world
 
-
 The example does this:
 
   * Create a session name "mysession",
@@ -23,8 +22,26 @@ The example does this:
   * Create a window name "mywindow2" and send the
     keys "world" and a return character.
 
-    
-## What this does
+
+## Install
+
+Install the quick way:
+
+    cd /usr/local/bin
+    curl -O https://raw.githubusercontent.com/SixArm/tmux-start/master/tmux-start
+
+Install the long term way:
+
+    cd /anywhere/you/want
+    git clone https://github.com/SixArm/tmux-start.git
+    export PATH="$PATH:/anywhere/you/want/tmux-start"
+
+...and add the PATH to your setup such as `/etc/environment` or `~/.bash_profile` or `~/.zshrc` etc.
+
+If you would like to help us by writing a package for any popular package manager, such as apt, yum, brew, etc., we wecome help.
+
+
+## What this script does
 
 The script creates the session "session-name".
 
