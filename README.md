@@ -53,8 +53,8 @@ The program is implemented via a Ruby gem.
 ## Tracking
 
 * Program: tmux-start
-* Version: 4.0.1
+* Version: 4.0.2
 * Created: 2013-08-02
-* Updated: 2018-08-28
+* Updated: 2018-08-29
 * License: GPL
 * Contact: Joel Parker Henderson (joel@joelparkerhenderson.com)
