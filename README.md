@@ -25,18 +25,17 @@ The example does this:
 
 ## Install
 
-Install the quick way:
+Option 1: download the file to wherever you want, then make it executable.
 
-    cd /usr/local/bin
-    curl -O https://raw.githubusercontent.com/SixArm/tmux-start/master/tmux-start
+    cd /usr/local/bin/
+    sudo curl -O https://raw.githubusercontent.com/SixArm/tmux-start/master/tmux-start
+    sudo chmod +x tmux-start
 
-Install the long term way:
+Option 2: clone the repo to anywhere you want, then add it to your path.
 
     cd /anywhere/you/want
-    git clone https://github.com/SixArm/tmux-start.git
+    git clone https://github.com/SixArm/tmux-start.git   
     export PATH="$PATH:/anywhere/you/want/tmux-start"
-
-...and add the PATH to your setup such as `/etc/environment` or `~/.bash_profile` or `~/.zshrc` etc.
 
 If you would like to help us by writing a package for any popular package manager, such as apt, yum, brew, etc., we wecome help.
 
