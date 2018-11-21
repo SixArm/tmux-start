@@ -85,6 +85,7 @@ if [ ! -z ${TMUX+_} ]; then
     err "To kill a session such as the one for this script:"
     err ""
     err "    tmux kill-session -t $session_name"
+    err ""
     exit 1
     set -e
 fi
