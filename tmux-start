@@ -5,37 +5,40 @@
 #
 # Syntax:
 #
-#     tmux-start <session-name> [window-name] ...
+#     tmux-start <session-name> [window-name] [window-keys] ...
 #
 # Example:
 #
-#     tmux-start demo alpha bravo charlie delta
+#     tmux-start mysession window1 vi window2 top
 #
 # The example does this:
 #
-#   * Create a session name "demo",
+#   * Create a session name "mysession",
 #     or if the session name already exists,
 #     then attach to the existing session.
 #
-#   * Create a window name "alpha" and send the
-#     keys "bravo" and a return character.
+#   * Create a window name "window1" and send the
+#     keys "vi" followed by a return character.
+#     This launches the "vi" text editor.
 #
-#   * Create a window name "charlie" and send the
-#     keys "delta" and a return character.
+#   * Create a window name "window2" and send the
+#     keys "top" followed by a return character.
+#     This launches the "top" monitoring program.
 #
 #
 # ## What this does
 #
-# The script creates the session "session-name".
+# Create a session with the given name.
 #
 # If the session name already exists, then the
 # script attaches to it i.e. to the existing session.
 #
-# The script creates windows, starting at window 1.
-# Set each window's name as per the command line args,
-# and send the keys as per the command line args.
+# Create a window, starting at window 1.
+# Set the window name as per the command line arg.
+# Send the window keys as per the command line args.
+# Repeat for all the command line args.
 #
-# The script selects window 1, and window 2 as the previous.
+# Finally, select window 1, and window 2 as the previous.
 # This is because we typically want the first window active,
 # and we want the second window to be available by one key.
 #
@@ -43,9 +46,9 @@
 # ## Tracking
 #
 # Program: tmux-start
-# Version: 4.0.2
+# Version: 4.0.3
 # Created: 2013-08-02
-# Updated: 2018-08-29
+# Updated: 2020-01-03
 # License: GPL
 # Contact: Joel Parker Henderson (joel@joelparkerhenderson.com)
 ##
@@ -117,7 +120,13 @@ do
   window_number=$((window_number+1))
 done
 
+# Kill window 0 because we prefer windows to start with window 1.
 tmux kill-window -t "$session_name:0"
+
+# Select window 2 so it will be our secondary choice, and
+# select window 1 so it will be our primary choice.
 tmux select-window -t "$session_name:2"
 tmux select-window -t "$session_name:1"
+
+# Attach to the session. Use 256 colors. Detach any other clients.
 tmux -2 attach-session -d
