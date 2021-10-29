@@ -9,33 +9,43 @@
 #
 # Example:
 #
-#     tmux-start mysession mywindow1 ls mywindow2 date
+#     tmux-start mysession mywindow top
 #
 # The example does this:
 #
-#   * If the session name "mysession" exists, then attach and be done.
+#   * Create a session name "mysesssion".
 #
-#   * Create a new session with name "mysesssion".
+#   * Create a window name "mywindow".
 #
-#   * Create a window name "mywindow1".
-#
-#   * Send the window the keys "ls" followed by a return;
-#     this command lists the files in the directory.
-#
-#   * Create a window name "mywindow2".
-#
-#   * Send the window the keys "date" followed by a return;
-#     this command shows the current date and time.
+#   * Send the window keys "top" and a return character,
+#     in order to run the "top" command.
 #
 #
-# ## What this does
+# ## How this works
 #
-# If the session name already exists, then attach and exit.
+# If the session name already exists:
 #
-# Create a new session with a session name by using the first arg,
-# and create each window and its keys by using the rest of the args.
+#   * Attach to it then exit.
 #
-# Finally, select the first window, because its our preference.
+# If there's a next arg:
+# 
+#   * Create a session name by using the arg.
+# 
+# If there's a next arg:
+# 
+#   * Create a window name by using the arg.
+#   
+# If there's a next arg:
+# 
+#   * Send window keys by using the arg.
+# 
+# If there's a next arg:
+# 
+#   * Repeat the steps to create a window name and window keys.
+# 
+# Finally:
+# 
+#   * Select the first window in order to make it visible.
 #
 #
 # ## Project goals
@@ -60,7 +70,8 @@
 # Safeguards
 set -euf
 
-# Helper functions
+# General purpose helper functions that you can use.
+# https://github.com/sixarm/sixarm-unix-shell-functions
 out() { printf %s\\n "$*" ; }; export -f out
 err() { >&2 printf %s\\n "$*" ; }; export -f err
 die() { err $(log) "$*" ; exit 255 ; }; export -f die

@@ -8,7 +8,7 @@ Syntax:
 
 Example:
 
-    tmux-start mysession mywindow1 ls mywindow2 date
+    tmux-start mysession mywindow top
 
 The example does this:
 
@@ -16,25 +16,37 @@ The example does this:
 
   * Create a new session with name "mysesssion".
 
-  * Create a window name "mywindow1".
+  * Create a window name "mywindow".
 
-  * Send the keys "ls" followed by a return;
-    this command lists the files in the directory.
-
-  * Create a window name "mywindow2".
-
-  * Send the keys "date" followed by a return;
-    this command shows the current date and time.
+  * Send the window keys "top" followed by a return,
+    in order to run the "top" command.
 
 
-## What this does
+## How this works
 
-If the session name already exists, then attach and exit.
+If the session name already exists:
 
-Create a new session with a session name by using the first arg,
-and create each window and its keys by using the rest of the args.
+  * Attach to it then exit.
 
-Finally, select the first window, because its our preference.
+If there's a next arg:
+
+  * Create a session name by using the arg.
+
+If there's a next arg:
+
+  * Create a window name by using the arg.
+  
+If there's a next arg:
+
+  * Send window keys by using the arg.
+
+If there's a next arg:
+
+  * Repeat the steps to create a window name and window keys.
+
+Finally:
+
+  * Select the first window in order to make it visible.
 
 
 ## Install
